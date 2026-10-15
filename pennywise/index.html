@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pennywise — Your Personal Finance Workspace</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <nav class="side" aria-label="Main">
+    <div class="brand">Penny<em>wise</em></div>
+    <button class="nav-btn" data-view="overview">Overview</button>
+    <button class="nav-btn" data-view="transactions">Transactions</button>
+    <button class="nav-btn" data-view="budgets">Budgets</button>
+    <button class="nav-btn" data-view="insights">Insights</button>
+    <button class="nav-btn" data-view="settings">Settings</button>
+  </nav>
+  <main id="main">
+    <section id="overview" class="view"></section>
+    <section id="transactions" class="view">
+      <header class="head"><h1>Transactions</h1><button class="btn primary" data-add>Add transaction</button></header>
+      <form class="filters" id="filters" aria-label="Filter transactions">
+        <input type="search" name="q" placeholder="Search description" aria-label="Search description">
+        <select name="type" aria-label="Type"><option value="">All types</option><option value="income">Income</option><option value="expense">Expense</option></select>
+        <select name="cat" id="fCat" aria-label="Category"><option value="">All categories</option></select>
+        <input type="date" name="from" aria-label="From date"><input type="date" name="to" aria-label="To date">
+        <select name="sort" aria-label="Sort"><option value="date-desc">Newest first</option><option value="date-asc">Oldest first</option><option value="amount-desc">Amount high–low</option><option value="amount-asc">Amount low–high</option></select>
+      </form>
+      <ul class="panel list" id="txList"></ul>
+    </section>
+    <section id="budgets" class="view">
+      <header class="head"><h1>Budgets</h1></header>
+      <form class="panel inline" id="budgetForm" novalidate>
+        <label>Category <select name="cat" id="bCat"></select></label>
+        <label>Monthly limit <input name="limit" type="number" min="1" step="any" required></label>
+        <button class="btn primary" type="submit" id="bSubmit">Set budget</button>
+        <p class="err" id="bErr" role="alert"></p>
+      </form>
+      <ul class="panel list" id="budgetList"></ul>
+    </section>
+    <section id="insights" class="view"></section>
+    <section id="settings" class="view">
+      <header class="head"><h1>Settings</h1></header>
+      <form class="panel stack" id="settingsForm" novalidate>
+        <label>Display name <input name="name" maxlength="30" required></label>
+        <label>Currency <select name="currency"><option>INR</option><option>USD</option><option>EUR</option><option>GBP</option></select></label>
+        <label>Overall monthly budget <input name="monthlyBudget" type="number" min="1" step="any" required></label>
+        <p class="err" id="sErr" role="alert"></p>
+        <div><button class="btn primary" type="submit">Save settings</button></div>
+      </form>
+      <div class="panel stack"><h2>Demo data</h2><p class="muted">Data lives only in this browser (localStorage). Nothing is sent anywhere, and Pennywise does not give financial advice.</p><div><button class="btn danger" id="resetBtn">Reset demo data</button></div></div>
+    </section>
+  </main>
+</div>
+
+<dialog id="txDialog" aria-labelledby="txTitle">
+  <form id="txForm" novalidate>
+    <h2 id="txTitle">Add transaction</h2>
+    <fieldset class="seg"><legend class="sr">Type</legend>
+      <label><input type="radio" name="type" value="expense" checked> Expense</label>
+      <label><input type="radio" name="type" value="income"> Income</label>
+    </fieldset>
+    <label>Description <input name="description" maxlength="60" required><span class="err" data-err="description"></span></label>
+    <div class="two">
+      <label>Amount <input name="amount" type="number" step="0.01" min="0" required><span class="err" data-err="amount"></span></label>
+      <label>Date <input name="date" type="date" required><span class="err" data-err="date"></span></label>
+    </div>
+    <label>Category <select name="category"></select></label>
+    <label>Notes (optional) <textarea name="notes" rows="2" maxlength="140"></textarea></label>
+    <div class="actions"><button type="button" class="btn" data-close>Cancel</button><button class="btn primary" type="submit">Save</button></div>
+  </form>
+</dialog>
+<dialog id="confirmDialog" aria-labelledby="cMsg">
+  <form method="dialog"><p id="cMsg"></p><div class="actions"><button class="btn" value="no">Cancel</button><button class="btn danger" value="yes" id="cOk">Confirm</button></div></form>
+</dialog>
+<div id="toasts" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>
